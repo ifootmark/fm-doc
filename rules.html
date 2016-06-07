@@ -1,0 +1,400 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>rules</title>
+    <link href="css/css.css" rel="stylesheet">
+    <link href="css/prettify.css" rel="stylesheet" />
+</head>
+<body>
+
+<div class="header">
+    <div class="header-content">
+        <div class="header-brand">
+            rules
+        </div>
+    </div>
+</div>
+    
+<div class="icontainer">
+
+<div class="profile">
+&nbsp;&nbsp;团队和个人开发是不同的，合理的编码规范方便自己，益于他人，对程序的性能效率等方面也有很大的好处。上线前的代码是给人看的，越规范越清晰越好，上线后的代码是给机器看的，越简洁越好，损人利己的事不能做，损人害己事更不能做，利人利己的事一定要做，基于上述原因，在此整理了一些编码规范，希望对大家在以后的工作中能有所帮助，同时，有不足的地方加以指正，以及时修改和完善。
+</div>
+
+一 ．HTML编码规范
+<div id="format-html" style="display:none;">
+1. 文档类型：使用 HTML5 ，所有 HTML 页面必须包含 &lt;!DOCTYPE html&gt;，并放在文件第一行。
+
+2. 合法性验证，所有标签都要关闭，即有开始和结束标签，包括单个的标签 <br> 等，<div>...</div> 标签成对出现。
+单个的标签应该使用"/"自关闭，"/"前必须有一个空格。如：
+&lt;hr /&gt;
+&lt;br /&gt;
+&lt;input typte="text" /&gt;
+&lt;img src="logo.jpg" alt="logo" /&gt;
+&lt;link rel="stylesheet" href="css.css" /&gt;
+
+3. 大小写，所有的代码都应是小写，包括元素名称、属性，属性值（除非 text 或 CDATA 的内容）、选择器、css 属性、属性值（字符串除外）。
+所有属性需要有属性值，属性值必须使用引号（一般为双引号）括起，没有属性值的应该像这样写：disabled="disabled"。
+
+4. 一个标记必须占用一行，并在每个子元素前缩进，不得出现两个标记在同一行的情况(同一标记的关闭标记除外)。
+不推荐：
+&lt;tr&gt;&lt;td&gt;text&lt;/td&gt;&lt;/tr&gt;
+
+推荐：
+&lt;tr&gt;
+    &lt;td&gt;text&lt;/td&gt;
+&lt;/tr&gt;
+
+5. 不得出现交叉包含的语句，如：
+<p><font>...</p></font>
+
+6. 多媒体后备，为多媒体提供备选内容，图片都要加 alt 属性，alt 的值最好与图片相关的，如果没有的话也要写上空的 alt=""。
+&lt;img src="images/logo.jpg" alt="logo" /&gt;
+
+7. 文件名后缀应统一是 html，而不使用 htm。
+
+8. 缩进，标签缩进统一为四个空格，使用 Tab 键需要设置软件的 Tab 键缩进 4 个空格，不要使用制表符加空格的混合方式缩进。
+
+9. 语义化标签，尽量使用 header、footer、nav、section 等标签替代 div,span,p 等无意义的标签，例如使用 h1-h6 作页面的标题，使用 ul，ol，dl 作列表。
+原始写法：
+<div class="list">
+    <div>item1</div>
+    <div>item2</div>
+    <div>item3</div>
+</div>
+
+改进写法：
+<ul class="list">
+    <li>item1</li>
+    <li>item1</li>
+    <li>item1</li>
+</ul>
+
+10. 标签的命名，多个单词使用中划线分隔，因为中划线会将长 ID 拆分为独立的单词，而下划线则将长 ID 显示成一个单词，中划线利于搜索引擎搜索。
+
+11. 不使用已经废弃的标签，如 <center></center> 等。
+
+12. 尽量不要使用 colspan，rowspan 两个属性，会引起兼容性问题。
+
+13. 页面中尽量少使用 table，使用 div，span 等标签替代，使结构与样式分离。
+
+14. 协议头，建议在指向图片或其他媒体文件、样式表和脚本的 URL 地址中省略 http：https: 协议部分，除非已知相应文件不能同时兼容两个协议。例如：
+&lt;img src="//www.qccr.com/images/logo.jpg" alt="logo" /&gt;
+.example {
+    background: url(//www.qccr.com/images/logo.jpg);
+}
+
+15. 尾随空格，去掉，有利于 diff 文件。
+
+16. 编码格式，使用 UTF-8 ，在 html 模板或文档中通过 &lt;meta charset=“utf-8” /&gt; 来定义编码格式。
+
+17. 注释，尽量做好注释，尚未实现的或待定的内容一定要标识强调出来，利用 TODO 辨识。
+
+18. 关注点分离，严格遵守将组织结构 (markup) 、表现样式 (style) 和行为动作 (script) 分开处理的原则，并且尽量使三者之间的关联度降到最小。
+这主要是基于维护性的考虑，通常，更新 style 文件或 script 文件比更改 HTML 文件的代价要小很多。
+
+19. 实体引用，文件和编辑器都是使用同样的编码格式（UTF-8），则没有必要使用实体引用的方式，除非一些 HTML 中具有特定含义的字符，如 &lt; 或不可见字符如空格等。
+
+20. Type 属性：可省略，将样式表和脚本中的 Type 省略，除非你不是用的 css 或 javascript ，在 HTML5 中，该值默认是 text/css 和 text/javascript。
+例如：
+&lt;link rel="stylesheet" href="//www.qccr.com/css/css.css" /&gt;
+&lt;script src="//www.qccr.com/js/js.js"&gt;&lt;/script&gt;
+
+21. 给每个表单里的字段加上 <label> 标签，其中的 for 属性必须和对应的输入字段对应，这样用户就可以点击标签。同理，给标签加上 cursor:pointer; 样式。
+
+22. 在某些闭合的 &lt;div&gt; 标签旁边加上一段 HTML 注释，说明这里闭合的是什么元素。这在有大量嵌套和缩进的情况下会很有用。
+
+</div>
+<pre id="format-html-render"></pre>	
+
+
+二、javascript编码规范
+<pre>
+1．所有 js 代码应写在一个 .js 文件中，使用 &lt;script src="js.js"&gt;&lt;/script&gt; 引入，不在 HTML 文件中直接写 js 代码。
+
+2．&lt;script&gt; 标签的 language 属性已废弃，不要再使用。
+
+3．所有变量使用前必须声明，声明变量需要使用 var 关键字，否则默认声明的为全局变量，变量名应为英文字母，数字，下划线 "_"，美元符号 "$" 组成，变量名第一个字符不能是数字。
+
+4．命名规则
+变量：采用骆驼峰的命名且首字母小写，如：userName = "xxx"; 。
+常量：采用全大写的命名，且单词之间使用下划线 "_" 连接，如：PAGE_SIZE="20"; 。
+类名：采用骆驼峰的命名且首字母大写，如：
+var FooAndToo = function(name) {
+    this.name = name;
+}
+9．函数命名一般以模块名如："news" 加上功能描述，如：newsShowDetail();
+
+5．
+
+6．代码中不要直接使用数字，而是事先将数字保存至一个变量或常量中，这样更便于理解，如：var RELOAD_DELAY="3000" 。
+
+7．每行语句结束时必须使用分号 ";" 结束，这样能提高解析的速度，同时能避免代码压缩时出错。
+
+8．一行语句的字符数不能太长，一般不超过80个字符，多出的应该换行显示。
+
+
+10．声明数组直接使用 var newArray = []; 替代 var newArray=new Array(); ，声明对象直接使用 var obj = {}; 替代 var obj=new Object(); 。
+
+11．代码缩进，统一缩进四个空格，不要使用软件自带的 Tab 键，因为每个软件的 Tab 键的缩进可能会不一致，如果需要使用，应将软件的 Tab 键设置为四个空格。
+
+12．代码书写格式
+if(...){
+    ......
+}else{
+    ......
+}
+
+function fun(){
+    ......
+}
+
+13．注释，分为行注释和块注释，根据需要选择。代码中应该合理使用注释，一般较复杂的功能性函数都需要注释说明作用及用途，以便阅读和维护。
+
+14．自定义类首字母大写，与 javascript 内置对象保持一致。
+
+15．不要使用 document.all 来判断 IE 浏览器，应使用其它替代，如：window.attachEvent。
+
+16．尽量不要使用 eval() 函数，因为 eval() 涉及安全问题，如代码注入。
+
+17．所有对象的最后一项不要加逗号 "," ，避免 IE6 中不识别出错。
+
+18．编码完后可以使用检查工具检查代码：JSLint (http://www.jslint.com/)
+
+19. 空格使用
+if 中的空格：判断条件 () 前后都要加空格，如：
+if (isOk) {
+    console.log("ok");
+}
+
+switch 中的空格：
+switch(name) {              // switch 后不应该有空格，() 后加空格
+    case "hotel":
+        console.log(name);  
+        break;              // break; 应该和console.log对齐
+
+    case "moive":           // 每个case之前需要有换行
+        console.log(name);
+        break;
+
+    default:
+        // code
+}
+
+for 中的空格：for 后加空格，每个 ";" 后加空格，() 中不用 var 声明变量; 如：
+var names = ["hotel", "movie"], 
+    i, len;
+for (i=0, len=names.length; i < len; i++) {
+    // code
+}
+
+function 中的空格：参数的反括号后加空格，function 后加空格
+function call(name) {
+}
+var cell = function () {
+};
+
+var 中空格及定义：
+function(res) {
+    var code = 1 + 1,
+        json = JSON.parse(res),
+        type, html;
+
+    // code
+}
+声明变量 = 前后加空格
+每个变量的赋值声明以 "," 结束后换行进行下一个变量赋值声明
+将所有不需要进行赋值的变量声明放置最后一行，且变量之间不需要换行
+当一组变量声明完成后，空一行后编写其余代码
+
+20. 在同一个函数内部，局部变量的声明必须置于顶端，因为即使放到中间，js 解析器也会提升至顶部。//http://www.adequatelygood.com/JavaScript-Scoping-and-Hoisting.html
+var clear = function(el) {
+    var id = el.id,
+        name = el.getAttribute("data-name");
+
+    ......
+    return true;
+}
+
+21. 块内函数必须用局部变量声明。
+/* 不推荐 */
+var call = function(name) {
+    if (name == "hotel") {
+        function foo() {
+            console.log("hotel foo");
+        }
+    }
+
+    foo && foo();
+}
+/* 不推荐 */
+var call = function(name) {
+    var foo;
+
+    if (name == "hotel") {
+        foo = function() {
+            console.log("hotel foo");
+        }
+    }
+
+    foo && foo();
+}
+第一种写法 foo 的声明被提前了; 调用 call 时，第一种写法会调用 foo 函数，第二种写法不会调用 foo 函数。//http://dmitrysoshnikov.com/ecmascript/chapter-5-functions/
+
+22. 不使用 eval，采取 $.parseJSON 。 原因：1) 有注入风险，尤其是 ajax 返回数据；2) 不方便 debug；3) 效率低，eval 是一个执行效率很低的函数
+
+23. 除了三目运算，if,else 等不用简写。
+if (true) {
+    alert(name);
+}
+
+24. 在需要以 {} 闭合的代码段前增加换行或注释，如：for if
+if (wl && wl.length) {
+
+    for (i = 0, l = wl.length; i < l; ++i) {
+        p = wl[i];
+        type = Y.Lang.type(r[p]);
+
+        if (s.hasOwnProperty(p)) {
+            // 处理merge逻辑
+            if (merge && type == 'object') {
+                Y.mix(r[p], s[p]);
+            } else if (ov || !(p in r)) {
+                r[p] = s[p];
+            }
+        }
+    }
+}
+
+25. 使用局部变量缓存反复查找的对象(包括但不限于全局变量、dom 查询结果、作用域链较深的对象)
+var getComment = function() {
+    var dom = $("#common-container"),   // 缓存 dom
+        appendTo = $.appendTo,          // 缓存全局变量
+        data = this.json.data;          // 缓存作用域链较深的对象
+
+}
+
+26. 当需要缓存 this 时必须使用 self 变量进行缓存，用 _this, that, me 等也可以。
+function Row(name) {
+    var self = this;
+
+    self.name = name;
+    $(".row").click(function() {
+        self.getName();
+    });
+}
+
+27. 超长函数, 当函数超过100行，就要想想是否能将函数拆为两个或多个函数。
+
+</pre>
+
+
+三．CSS编码规范
+<div id="format-css" style="display:none;">
+1. 所有的 css 代码都写到一个 css 文件中，使用 &lt;link rel="stylesheet" href="css.css" /&gt; 引入到页面中。
+
+2. 书写格式，多个选择器时每个选择器独占一行。多个属性值时每个属性值独占一行，属性值有单位的加上单位（如果是0，无需加单位），每个属性后加 ";" ，方便压缩工具断句。如下所示：
+.header {width:1000px;}
+.header {
+    width:1000px;
+    height:100px;
+    border:1px solid #9c9c9c;
+}
+
+3. 使用简写，如：
+font-style:italic;
+font-weight:bold;
+font-size:14px;
+line-height:18px;
+简写成：
+font:italic bold 14px/18px;
+
+4. 命名全部使用小写，并有意义，尽量不要使用缩写，采用 "-" 对 class 中的字母分隔，如：产品线-产品-模块-子模块
+ .hotel-title {
+     font-weight: bold;
+ }
+
+5. 使用空格，选择器与 { 之前要有空格，属性名的 : 后要有空格，如：
+.hotel-content {
+    font-weight: bold;
+}
+ 
+6. A标签伪类书写要严格按照 a:link -> a:visited -> a:hover -> a:active 的顺序，否则在某些浏览器中会失效。
+提示：a:hover 必须被置于 a:link 和 a:visited 之后，才有效。a:active 必须被置于 a:hover 之后，才有效。
+
+7. 设置颜色时统一使用十六进制的颜色单位，使用 color:#FF0000 替代 color:red 。
+
+9. 格式化标签的默认样式(reset.css，见 www.cssreset.com )，如：body，h1-h6，p，ul，li 等(因为每个浏览器对 HTML 标签样式解析是不一致的，需要将所有浏览器统一)
+
+10. body 元素要设置 background-color 属性，比如当 body 背景色使用白色时，虽然默认是白色，但还是应该显式的声明 background-color: "#ffffff"; 这样可以避免用户将默认值修改后引起兼容性问题。
+
+11. CSS Hack 是当某个浏览器或版本中的实际表现与需要的样式不一致时的补救方法，出现这种问题的原因可能是浏览器对某个样式不支持，也有可能是自身的 css 代码不标准。
+CSS Hack 只是一种补救方法，出现问题时，应该先检查自己的代码是符合标准，再考虑使用 Hack，能不用时尽量不用。如果用 Hack 可以参考如下示例：
+/* 针对ie的hack */
+selector {
+    property: value;     /* 所有浏览器 */ 
+    property: value\9;   /* 所有IE浏览器 */ 
+    property: value\0;   /* IE8 */
+    +property: value;    /* IE7 */
+    _property: value;    /* IE6 */
+    *property: value;    /* IE6-7 */
+}
+
+12. 不使用 css 提供的 @import ，如：嵌套使用会增加请求数、加载顺序、兼容性等。见 http://www.stevesouders.com/blog/2009/04/09/dont-use-import
+
+13. 书写顺序，定位(display position left top float)等，盒模型(width height margin padding border)等，其他属性(color font)，提升浏览器渲染 dom 的性能。如：
+.hotel-content {
+     /* 定位 */
+     display: block;
+     position: absolute;
+     left: 0;
+     top: 0;
+     /* 盒模型 */
+     width: 50px;
+     height: 50px;
+     margin: 10px;
+     border: 1px solid black;
+     /* 其他属性 */
+     color: #efefef;
+}
+例如，网页中的图片，如果没有设置width和height，在图片载入之前，他所占的空间为0，但是当他加载完毕之后，那块为0的空间突然被撑开了，这样会导致，他下面的元素重新排列和渲染，造成重绘（repaint）和回流（reflow）。我们在写css的时候，把元素的定位放在前头，首先让浏览器知道该元素是在文本流内还是外，具体在页面的哪个部位，接着让浏览器知道他们的宽度和高度，border等这些占用空间的属性，其他的属性都是在这个固定的区域内渲染。
+
+14. 小图片 sprite 合并，减少请求次数。
+
+15. IE 不使用 filter, 不使用 expression ，提高效率。
+
+16. 不使用内联（inline）样式，尽量做到样式和结构分离。
+
+17. 避免 "*" 通配符选择器。如：
+* {
+    margin: 0;
+    padding: 0;
+}
+18. 不要叠加限定条件到 ID 选择器（例如 div#myid）或 class 选择器（例如 table.results）上，这对于速度至上并包含了成千上万个 DOM 元素的 web 应用来说尤为重要。
+
+</div>
+<pre id="format-css-render"></pre>
+		
+</div>
+    
+	<script src="js/jquery-2.2.0.min.js"></script>
+	<script src="js/prettify.js"></script>
+	<script>
+		$(document).ready(function(){
+			$('#format-html-render').html(re($('#format-html').html()));
+			$('#format-css-render').html(re($('#format-css').html()));
+		});
+		function re(s) {
+			return s.
+			replace(/</g, '&lt;').
+			replace(/>/g, '&gt;');
+			//replace(/&lt;script src[\s\S]*?&gt;&lt;\/script&gt;|&lt;!--\?[\s\S]*?--&gt;|&lt;pre\b[\s\S]*?&lt;\/pre&gt;/g,'$&');
+		}
+	</script>
+</body>
+</html>
+
