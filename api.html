@@ -21,14 +21,72 @@
  
 <div class="icontainer">
     <div class="profile mt50">
-        &nbsp;&nbsp;为了与后端人员更好地沟通，减少沟通成本，提高开发效率，在此定义下 API 规范，请后端开发人员按此规范进行开发，有不合理的地方请大家给予指出，以及时修改和完善。
+        &nbsp;&nbsp;为了与后端人员更好地沟通，减少沟通成本，提高开发效率，在此定义 REST API 规范，报文规范采用 JSON，它高效、可读、灵活，用以定义客户端获取、创建、更新、删除资源，与服务器响应对应请求。请后端开发人员按此规范进行开发，有不合理的地方请大家给予指出，以及时修改和完善。
+    </div>
+    <div class="profile mt20">
+        <header class="doc-api-header">请求原则</header>
+        
+        <p>URL：http://127.0.0.1/api/{version}/{resource}?{querystring}</p>
+        <p>说明：</p>
+        <ul>
+            <li>URL 中的 {version} API 版本号。</li>
+            <li>URL 中的 {resource} 为操作的资源名。</li>
+            <li>{querystring} 由通用参数和具体 API 调用参数组成。</li>
+            <li>{querystring} 中的 key/value 对都必须经过 urlencode 处理，且必须是 UTF-8 编码。</li>
+            <li>对于 GET 请求，{querystring} 必须放在 QUERY 参数中传递，即放在“?”后面。</li>
+            <li>对于 POST 请求，{querystring} 放在POST参数中传递。</li>
+            <li>原则上不同的操作由对应的 GET，POST, PUT 和 DELETE 方法请求响应。</li>
+        </ul>
+        <p>响应数据：</p>
+        <ul>
+            <li>格式为 JSON，UTF-8 编码。</li>
+            <li>响应头中的 Content-Type 设为：application/json;charset=utf-8</li>
+        </ul>
     </div>
 
-    <header class="doc-api-header">获取品牌列表</header>
+    <header class="doc-api-header">品牌 API</header>
     <ol>
-        <li>接口地址：http://127.0.0.1/api/brands</li>
+        <li>接口地址：
+            <div class="doc-api-tbl mt10 mb10">
+                <table cellspacing="0" cellpadding="0">
+                    <thead>
+                        <tr>
+                            <th>URL</th>
+                            <th>HTTP</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>http://127.0.0.1/api/1.0/brands</td>
+                            <td>POST</td>
+                            <td>创建</td>
+                        </tr>
+                        <tr>
+                            <td>http://127.0.0.1/api/1.0/brands</td>
+                            <td>GET</td>
+                            <td>查询</td>
+                        </tr>
+                        <tr>
+                            <td>http://127.0.0.1/api/1.0/brands/id</td>
+                            <td>GET</td>
+                            <td>获取</td>
+                        </tr>
+                        <tr>
+                            <td>http://127.0.0.1/api/1.0/brands/id</td>
+                            <td>PUT</td>
+                            <td>更新</td>
+                        </tr>
+                        <tr>
+                            <td>http://127.0.0.1/api/1.0/brands/id</td>
+                            <td>DELETE</td>
+                            <td>删除</td>
+                        </tr>
+                    </tbody>
+                </table>           
+            </div>
+        </li>
         <li>是否需登录：false</li>
-        <li>请求方式：GET</li>
         <li>请求参数：
             <div class="doc-api-tbl mt10 mb10">
                 <table cellspacing="0" cellpadding="0">
@@ -74,8 +132,7 @@
         <li>返回格式：JSON</li>
         <li>返回示例：
 <pre>
-GET: 获取品牌列表，返回数据格式示例：
-http://127.0.0.1/api/brands
+GET: 获取品牌列表
 {
     "webResult": {
         "data": [
@@ -108,7 +165,6 @@ http://127.0.0.1/api/brands
     }
 }
 
-注：如果是 jsonp 方式，增加回调函数：callback(jsonString)
 </pre>
         </li>
         <li>字段说明：
@@ -148,9 +204,48 @@ http://127.0.0.1/api/brands
 
 
 <div class="icontainer">
-    <header class="doc-api-header">获取区域列表</header>
+    <header class="doc-api-header">区域 API</header>
     <ol>
-        <li>接口地址：http://127.0.0.1/api/regions</li>
+        <li>接口地址：
+            <div class="doc-api-tbl mt10 mb10">
+                <table cellspacing="0" cellpadding="0">
+                    <thead>
+                        <tr>
+                            <th>URL</th>
+                            <th>HTTP</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>http://127.0.0.1/api/1.0/regions</td>
+                            <td>POST</td>
+                            <td>创建</td>
+                        </tr>
+                        <tr>
+                            <td>http://127.0.0.1/api/1.0/regions</td>
+                            <td>GET</td>
+                            <td>查询</td>
+                        </tr>
+                        <tr>
+                            <td>http://127.0.0.1/api/1.0/regions/id</td>
+                            <td>GET</td>
+                            <td>获取</td>
+                        </tr>
+                        <tr>
+                            <td>http://127.0.0.1/api/1.0/regions/id</td>
+                            <td>PUT</td>
+                            <td>更新</td>
+                        </tr>
+                        <tr>
+                            <td>http://127.0.0.1/api/1.0/regions/id</td>
+                            <td>DELETE</td>
+                            <td>删除</td>
+                        </tr>
+                    </tbody>
+                </table>           
+            </div>
+        </li>
         <li>是否需登录：false</li>
         <li>请求方式：GET</li>
         <li>请求参数：
@@ -198,8 +293,7 @@ http://127.0.0.1/api/brands
         <li>返回格式：JSON</li>
         <li>返回示例：
 <pre>
-GET: 获取区域列表，返回数据格式示例：
-http://127.0.0.1/api/regions
+GET: 获取区域列表
 {
     "webResult": {
         "data": [
@@ -231,7 +325,6 @@ http://127.0.0.1/api/regions
     }
 }
 
-注：如果是 jsonp 方式，增加回调函数：callback(jsonString)
 </pre>
         </li>
         <li>字段说明：
