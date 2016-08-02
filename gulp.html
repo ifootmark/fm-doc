@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+    <title>gulp</title>
+    <link type="text/css" rel="stylesheet" href="./3rd/SyntaxHighlighter/styles/shCoreRDark.css"/>
+    <link type="text/css" rel="stylesheet" href="./css/semantic.min.css"/>
+    <link type="text/css" rel="stylesheet" href="./css/lib.css"/>
+</head>
+<body>
+    <div class="ui fluid container icontainer">
+        <div class="ui large centered header">Gulp</div>
+        <div class="ui horizontal divider">第三讲</div>
+
+        <div class="ui warning message">
+            <a href='http://gulpjs.com/' target="_blank">Gulp</a> 一个基于流的构建工具。
+            <p>gulp是前端开发过程中对代码进行构建的工具，是自动化项目的构建利器；她不仅能对网站资源进行优化，而且在开发过程中很多重复的任务能够使用正确的工具自动完成；使用她，我们不仅可以很愉快的编写代码，而且大大提高我们的工作效率</p>
+            <p><a href='https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md' target='_blank'>文档</a></p>
+            <p><a href='http://www.gulpjs.com.cn/docs/getting-started/' target='_blank'>文档(中文)</a></p>
+        </div>
+        <br/>
+
+
+        <div class="ui segment" id='guifan'>
+            <div class="ui large header">开始</div>
+            <div class="ui divider"></div>
+
+            <pre class="brush: js;">
+                //全局安装
+                npm install --global gulp
+                //项目的开发依赖安装
+                npm install --save-dev gulp
+            </pre>
+
+            根目录下创建 gulpfile.js 文件：
+            <pre class="brush: js;">
+                var gulp = require('gulp');
+
+                gulp.task('default', function() {
+                  // 将你的默认的任务代码放在这
+                });            
+            </pre>
+
+            执行命令：<span class="ui small header">gulp</span>      
+        </div><br/>
+        
+        <p></p>
+        <p>以下看文档，看文档，看文档。。。</p>
+        <p><a href='https://github.com/gulpjs/gulp/blob/master/docs/API.md' target='_blank'>API</a></p>
+        <p><a href='http://www.gulpjs.com.cn/docs/api/' target='_blank'>API(中文)</a></p>
+
+    </div>
+
+    <script type="text/javascript" src="./js/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="./3rd/SyntaxHighlighter/scripts/shCore.js"></script>
+    <script type="text/javascript" src="./3rd/SyntaxHighlighter/scripts/shAutoloader.js"></script>
+    <script type="text/javascript" src="./js/semantic.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            SyntaxHighlighter.autoloader(
+                ['js','jscript','javascript','3rd/SyntaxHighlighter/scripts/shBrushJScript.js'],
+                ['bash','shell','3rd/SyntaxHighlighter/scripts/shBrushBash.js'],
+                ['css','3rd/SyntaxHighlighter/scripts/shBrushCss.js'],
+                ['xml','html','3rd/SyntaxHighlighter/scripts/shBrushXml.js'],
+                ['sql','3rd/SyntaxHighlighter/scripts/shBrushSql.js'],
+                ['php','3rd/SyntaxHighlighter/scripts/shBrushPhp.js'],
+                ['java','3rd/SyntaxHighlighter/scripts/shBrushJava.js'],
+                ['groovy','3rd/SyntaxHighlighter/scripts/shBrushGroovy.js']
+            );
+            SyntaxHighlighter.config.bloggerMode = true;
+            SyntaxHighlighter.defaults['toolbar'] = false;
+            SyntaxHighlighter.all(); 
+        })
+    </script>
+</body>
+</html>
+
+

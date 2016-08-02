@@ -1,0 +1,301 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+    <title>React</title>
+    <link type="text/css" rel="stylesheet" href="./3rd/SyntaxHighlighter/styles/shCoreRDark.css"/>
+    <link type="text/css" rel="stylesheet" href="./css/semantic.min.css"/>
+    <link type="text/css" rel="stylesheet" href="./css/lib.css"/>
+</head>
+<body>
+    <div class="ui fluid container icontainer">
+        <div class="ui large centered header">React</div>
+        <div class="ui horizontal divider">第一讲</div>
+
+        <p><a href='#jsx'>JSX</a></p>
+        <p><a href='#jsxtran'>JSX转化器</a></p>
+        <p><a href='#htmltag'>HTML 标签 & React 模块</a></p>
+        <p><a href='#jsexpress'>Javascript表达式</a></p>
+        <p><a href='#zhushi'>注释</a></p>
+        <p><a href='#spreadattr'>传播属性</a></p>
+        <p><a href='#refs'>获取真实的DOM节点</a></p>
+        <p><a href='#life'>组件的生命周期</a></p>
+        <p><a href='#com'>组件</a></p>
+
+
+        <div class="ui warning message">
+            <a href='http://facebook.github.io/react/' target="_blank">React</a> 是一个 Facebook 和 Instagram 用来创建用户界面的 JavaScript 库。
+            我们以 react 为库来创建组件，组件有自己的结构、逻辑、样式，会依赖一些资源，或依赖其他组件。
+            <ol class="ui list">
+                <li>通过前端模板引擎定义结构</li>
+                <li>JS文件中写自己的逻辑</li>
+                <li>CSS中写组件的样式</li>
+                <li>通过RequireJS、SeaJS等库来解决模块之间的相互依赖</li>
+            </ol>               
+        </div>
+        <br/>
+
+
+        <div class="ui segment" id='jsx'>
+            <div class="ui large header">JSX</div>
+            <div class="ui divider"></div>
+            用React写组件的时候，通常会用到JSX语法，HTML 语言直接写在 JavaScript 语言之中，被JSX转换工具转换成纯Javascript代码，当然你想直接使用纯Javascript代码写也是可以的，只是利用JSX，组件的结构和组件之间的关系看上去更加清晰。
+            <pre class="brush: html;">
+                &lt;!DOCTYPE html&gt;
+                &lt;html&gt;
+                  &lt;head&gt;
+                    <script src="build/react.js"></script>
+                    <script src="build/JSXTransformer.js"></script>
+                  &lt;/head&gt;
+                  &lt;body&gt;
+                    <div id="example"></div>
+                    <script type="text/jsx">
+                        React.render(
+                            <h1>Hello, world!</h1>,
+                            document.getElementById('example')
+                        );
+                    </script>
+                  &lt;/body&gt;
+                &lt;/html&gt;
+            </pre>
+            通过 JavaScript 直接生成模板，这样你就可以用一个真正语言的所有表达能力去构建用户界面。为了使这变得更简单，我们做了一个非常简单、可选类似 HTML 语法 ，通过函数调用即可生成模板的编译器，称为 JSX。<br/><br/>
+
+            <p>文件分离</p>
+            你的 React JSX 代码文件可以写在另外的文件里。新建下面的 helloworld.js。
+            <pre class="brush: js;">
+                React.render(
+                    <h1>Hello, world!</h1>,
+                    document.getElementById('example')
+                );
+            </pre>
+            <p>然后在 helloworld.html 引用该文件：</p>
+            &lt;script type="text/jsx" src="./helloworld.js"&gt;&lt;/script&gt;
+        </div><br/>
+
+
+        <div class="ui segment" id='jsxtran'>
+            <div class="ui large header">JSX转化器</div>
+            <div class="ui divider"></div>
+
+            JSX转换，下面JSX代码：
+            <pre class="brush: js;">
+                var Nav = React.createClass({/*...*/});
+                var app = <Nav color="blue"><Profile>click</Profile></Nav>;
+            </pre>
+
+            转化后：
+            <pre class="brush: js;">
+                var Nav = React.createClass({/*...*/});
+                var app = React.createElement(
+                    Nav,
+                    {color:"blue"},
+                    React.createElement(Profile, null, "click")
+                );
+            </pre>
+            React.createElement这个方法有三个参数，第一个参数可以是一个字符串，表示是一个HTML标准内的元素，或者是一个ReactClass类型的对象，表示我们之前封装好的自定义组件。第二个参数是一个对象，它保存了这个元素的所有固有属性；从第三个参数，内容或子元素。<br/><br/>
+
+            <p>把JSX语法的代码转化为纯Javascript代码，有多种方式。</p>
+            1、对于内联与HTML中的代码或者是未经过转化的外部文件，在script标签中要加上type="text/jsx"，并引入JSXTransformer.js文件即可，不过这种方式并不建议在生产环境使用，建议的方法是在代码上线前就将代码转换好。<br/>
+            2、也可以使用npm全局安装react-tools：
+            <p class="ui small header">npm install -g react-tools</p>
+            <p>执行命令：</p>
+            <p class="ui small header">jsx src/ build/</p>
+            若想监听文件变化并自动编译，可执行命令：<p class="ui small header">jsx --watch src/ build/</p>
+            
+            <p>3、如果使用自动化工具，比如gulp的话，可以使用相应插件gulp-react。</p>
+            更多详情参见：<a href='http://docs.reactjs-china.com/react/docs/jsx-in-depth.html' target="_blank">jsx-in-depth</a>
+        </div><br/>
+
+
+        <div class="ui segment" id='htmltag'>
+            <div class="ui large header">HTML 标签 & React 模块</div>
+            <div class="ui divider"></div>
+
+            <p>React 可以渲染 HTML 标签 (strings) 或 React 模块 (classes)。</p>
+            <p>要渲染 HTML 标签，只需在 JSX 里使用小写字母开头的标签名。要创建一个HTML标准中存在的元素，直接像写HTML代码一样即可：</p>
+            <pre class="brush: js;">
+                var myDivElement = &lt;div className="foo" /&gt;;
+                React.render(myDivElement, document.body);
+            </pre>
+            
+            <p>要渲染 React 模块，只需创建一个大写字母开头的本地变量。</p>
+            <pre class="brush: js;">
+                var MyComponent = React.createClass({/*...*/});
+                var myElement = &lt;MyComponent someProperty={true} /&gt;;
+                React.render(myElement, document.body);
+            </pre>
+
+            <p>React 的 JSX 里约定分别使用首字母大、小写来区分本地模块的类和 HTML 标签。</p>
+
+
+            不过需要注意的是class和for这两个属性，由于 JSX 就是 JavaScript，一些标识符像 class 和 for 不建议作为 XML 属性名。作为替代，React DOM 使用 <span class="ui header">className</span> 和 <span class="ui header">htmlFor</span> 来做对应的属性。<br/>
+            还有一点是，在创建HTML标准内的元素时，JSX转化器会丢弃那些非标准的属性，如果一定要添加自定义属性，那么需要在这些自定义属性之前添加 <span class="ui header">data-</span> 前缀。<br/>
+            <pre class="brush: html;">
+                &lt;div data-custom-attribute="foo" /&gt;
+            </pre>
+            <p></p>
+        </div><br/>
+
+
+        <div class="ui segment" id='jsexpress'>
+            <div class="ui large header">Javascript表达式</div>
+            <div class="ui divider"></div>
+
+            在JSX语法中，要使用 JavaScript 表达式作为属性值，只需把这个表达式用一对大括号 ({}) 包起来，不要用引号 ("")。 比如下面这个使用三目运算符的例子：
+            <pre class="brush: js;">
+                // Input (JSX):
+                var content = &lt;Container&gt;{window.isLoggedIn ? &lt;Nav /&gt; : &lt;Login /&gt;}&lt;/Container&gt;;
+                // Output (JS):
+                var content = React.createElement(
+                    Container,
+                    null,
+                    window.isLoggedIn ? React.createElement(Nav) : React.createElement(Login)
+                );
+            </pre>
+            更多详情参见：<a href='http://docs.reactjs-china.com/react/docs/jsx-in-depth.html' target="_blank">jsx-in-depth</a>
+        </div><br/>
+
+
+        <div class="ui segment" id='zhushi'>
+            <div class="ui large header">注释</div>
+            <div class="ui divider"></div>
+
+            JSX 里添加注释很容易；它们只是 JS 表达式而已。你只需要在一个标签的子节点内(非最外层)小心地用 {} 包围要注释的部分。
+            <pre class="brush: js;">
+                var content = (
+                  &lt;Nav&gt;
+                    {/* 一般注释, 用 {} 包围 */}
+                    &lt;Person
+                      /* 多
+                         行
+                         注释 */
+                      name={window.isLoggedIn ? window.name : ''} // 行尾注释
+                    /&gt;
+                  &lt;/Nav&gt;
+                );
+            </pre>
+        </div><br/>
+
+        
+        <div class="ui segment" id='spreadattr'>
+            <div class="ui large header">传播属性</div>
+            <div class="ui divider"></div>
+
+            在JSX中，可以使用...运算符，表示将一个对象的键值对与ReactElement的props属性合并，这个...运算符的实现类似于ES6 Array中的...运算符的特性。
+            <pre class="brush: js;">
+                var props = { foo: x, bar: y };
+                var component = &lt;Component { ...props } /&gt;;
+            </pre>
+            相当于：
+            <pre class="brush: js;">
+                var component = &lt;Component foo={x} bar={y} /&gt;
+            </pre>
+            它也可以和普通的XML属性混合使用，需要同名属性，后者将覆盖前者：
+            <pre class="brush: js;">
+                var props = { foo: 'default' };
+                var component = &lt;Component {...props} foo={'override'} /&gt;;
+                console.log(component.props.foo); // 'override'
+            </pre>
+            更多详情参见：<a href='http://docs.reactjs-china.com/react/docs/jsx-spread.html' target="_blank">jsx-spread</a>
+        </div><br/>
+
+
+        <div class="ui segment" id='refs'>
+            <div class="ui large header">获取真实的DOM节点</div>
+            <div class="ui divider"></div>
+
+            组件并不是真实的 DOM 节点，而是存在于内存之中的一种数据结构，叫做虚拟 DOM （virtual DOM）。只有当它插入文档以后，才会变成真实的 DOM 。根据 React 的设计，所有的 DOM 变动，都先在虚拟 DOM 上发生，然后再将实际发生变动的部分，反映在真实 DOM上，这种算法叫做 DOM diff ，它可以极大提高网页的性能表现。<br/>
+            但是，有时需要从组件获取真实 DOM 的节点，这时就要用到 ref 属性
+            <pre class="brush: js;">
+                var MyComponent = React.createClass({
+                    componentDidMount: function() {
+                        var test = ReactDOM.findDOMNode(this.refs.test);
+                        $(test).focus();
+                    },
+                    render: function() {
+                        return (
+                          <div>
+                            <input type="text" ref="test" />
+                          </div>
+                        );
+                      }
+                });
+
+                ReactDOM.render(
+                  &lt;MyComponent /&gt;,
+                  document.getElementById('example')
+                );
+            </pre>
+            需要注意的是，由于 this.refs.[refName] 属性获取的是真实 DOM ，所以必须等到虚拟 DOM 插入文档以后，才能使用这个属性，否则会报错。<br/>
+            
+            更多详情参见：<a href='http://facebook.github.io/react/docs/more-about-refs.html' target="_blank">more-about-refs</a>
+        </div><br/>
+
+
+        <div class="ui segment" id='life'>
+            <div class="ui large header">组件的生命周期</div>
+            <div class="ui divider"></div>
+
+            React 为每个状态都提供了两种处理函数，will 函数在进入状态之前调用，did 函数在进入状态之后调用，三种状态共计五种处理函数。
+            <pre class="brush: js;">
+                componentWillMount()
+                componentDidMount()
+                componentWillUpdate(object nextProps, object nextState)
+                componentDidUpdate(object prevProps, object prevState)
+                componentWillUnmount()
+            </pre>
+            更多详情参见：<a href='http://facebook.github.io/react/docs/component-specs.html#lifecycle-methods' target="_blank">lifecycle-methods</a>
+        </div><br/>
+
+
+        <div class="ui segment" id='com'>
+            <div class="ui large header">组件</div>
+            <div class="ui divider"></div>
+            
+            <p>React 组件非常简单。你可以认为它们就是简单的函数，接受 props 和 state 作为参数，然后渲染出 HTML。正是应为它们是这么的简单，这使得它们非常容易理解。</p>
+
+            <p>注意:只有一个限制: React 组件只能渲染单个根节点。如果你想要返回多个节点，它们必须被包含在同一个节点里。</p>
+
+            <p><a href="react-hello.html" target="_blank">示例1</a></p>
+            <p>在浏览器中打开 hello-react.html ，在输入框输入你的名字。你会发现 React 在用户界面中只改变了时间，任何你在输入框输入的内容一直保留着，即使你没有写任何代码来完成这个功能。React 为你解决了这个问题，做了正确的事。<br/>
+            我们想到的方法是除非不得不操作 DOM ，React 是不会去操作 DOM 的。它用一种更快的内置仿造的 DOM 来操作差异，为你计算出出效率最高的 DOM 改变。<br/>对这个组件的输入称为 props - "properties"的缩写。得益于 JSX 语法，它们通过参数传递。你必须知道在组件里，这些属性是不可改变的，也就是说 this.props 是只读的。</p>
+
+            <p><a href="react-timer.html" target="_blank">示例2</a></p>
+
+            <p><a href="http://localhost:801/list.html" target="_blank">示例3</a></p>
+
+            <p><a href="http://localhost:801/form.html" target="_blank">示例4</a></p>
+
+        </div><br/>
+
+
+    </div>
+
+    <script type="text/javascript" src="./js/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="./3rd/SyntaxHighlighter/scripts/shCore.js"></script>
+    <script type="text/javascript" src="./3rd/SyntaxHighlighter/scripts/shAutoloader.js"></script>
+    <script type="text/javascript" src="./3rd/dist/semantic.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            SyntaxHighlighter.autoloader(
+                ['js','jscript','javascript','3rd/SyntaxHighlighter/scripts/shBrushJScript.js'],
+                ['bash','shell','3rd/SyntaxHighlighter/scripts/shBrushBash.js'],
+                ['css','3rd/SyntaxHighlighter/scripts/shBrushCss.js'],
+                ['xml','html','3rd/SyntaxHighlighter/scripts/shBrushXml.js'],
+                ['sql','3rd/SyntaxHighlighter/scripts/shBrushSql.js'],
+                ['php','3rd/SyntaxHighlighter/scripts/shBrushPhp.js'],
+                ['java','3rd/SyntaxHighlighter/scripts/shBrushJava.js'],
+                ['groovy','3rd/SyntaxHighlighter/scripts/shBrushGroovy.js']
+            );
+            SyntaxHighlighter.config.bloggerMode = true;
+            SyntaxHighlighter.defaults['toolbar'] = false;
+            SyntaxHighlighter.all(); 
+        })
+    </script>
+</body>
+</html>
+
+

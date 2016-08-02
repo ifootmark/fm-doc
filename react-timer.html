@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+    <title>react-timer</title>
+    <script src="js/react.min.js"></script>
+    <script src="js/JSXTransformer.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/lib.css" />
+</head>
+<body>
+    <div id="example"></div>
+    <script type="text/jsx">
+
+        var TimeMessage = React.createClass({
+          render: function() {
+            var elapsed = Math.round(this.props.elapsed / 100);
+            var seconds = elapsed / 10 + (elapsed % 10 ? '' : '.0');
+
+            // JSX code
+            return <p > <br/>React has been successfully running
+            for {
+              seconds
+            }
+            seconds. </p>;
+          }
+        });
+
+        var Timer = React.createClass({
+          getInitialState: function() {
+            return {
+              now: new Date()
+            };
+          },
+
+          componentDidMount: function() {
+            var that = this;
+            setInterval(function() {
+              that.setState({
+                now: new Date()
+              });
+            }, 50);
+          },
+
+          render: function() {
+            // JSX code
+            var elapsed = this.state.now.getTime() - this.props.start.getTime();
+            return <TimeMessage elapsed = {elapsed}/>;
+          }
+        });
+
+
+        (function(){
+            var start = new Date();
+              Timer = React.createFactory(Timer);
+              React.render(
+                  Timer({start: start}),
+                  document.getElementById('example')
+              );
+        })();        
+
+    </script>
+
+    
+</body>
+</html>

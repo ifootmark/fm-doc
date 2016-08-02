@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+    <title>react-hello</title>
+    <script src="js/react.min.js"></script>
+    <script src="js/JSXTransformer.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/lib.css" />
+</head>
+<body>
+    <div id="example"></div>
+    <script type="text/jsx">
+        var HelloWorld = React.createClass({
+          render: function() {
+            return (
+              <p>
+                <br/>Hello, <input type="text" placeholder="Your name here" />!<br/><br/>
+                It is {this.props.date.toTimeString()}
+              </p>
+            );
+          }
+        });
+
+        setInterval(function() {
+          React.render(
+            <HelloWorld date={new Date()} />,
+            document.getElementById('example')
+          );
+        }, 1000);
+
+    </script>
+
+    
+</body>
+</html>

@@ -1,0 +1,588 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webpack</title>
+    <link type="text/css" rel="stylesheet" href="./3rd/SyntaxHighlighter/styles/shCoreRDark.css"/>
+    <link type="text/css" rel="stylesheet" href="./css/semantic.min.css"/>
+    <link type="text/css" rel="stylesheet" href="./css/lib.css"/>
+</head>
+<body>
+    <div class="ui fluid container icontainer">
+        <div class="ui large centered header">Webpack</div>
+        <div class="ui horizontal divider">第四讲</div>
+
+        <p><a href='#guifan'>JS规范</a></p>
+        <p><a href='#anzhuang'>安装</a></p>
+        <p><a href='#peizhi'>配置文件</a></p>
+        <p><a href='#mingling'>webpack命令</a></p>
+        <p><a href='#loader'>模块加载器</a></p>
+        <p><a href='#alias'>使用别名</a></p>
+        <p><a href='#gonggongmokuai'>公共模块提取</a></p>
+        <p><a href='#dabaoyangshi'>独立打包样式</a></p>
+        <p><a href='#dabaoduowenjian'>打包成多个资源文件</a></p>
+        <p><a href='#dabaotupian'>打包图片</a></p>
+        <p><a href='#anxujiazai'>按需加载</a></p>
+        <p><a href='#cdn'>使用 CDN</a></p>
+        <p><a href='#gulp'>Webpack & gulp</a></p>
+        <p><a href='#react'>Webpack & React</a></p>
+        <p><a href='#devserver'>webpack-dev-server</a></p>
+        <p><a href='#reacthot'>react-hot-loader</a></p>
+
+
+        <div class="ui warning message">
+            <a href='http://webpack.github.io/' target="_blank">Webpack</a> 一个前端工具，可以对js/jsx/coffee/less/sass/图片等资源模块进行加载，预处理，再进行打包。
+            <p>优点如下：</p>
+            <ol class="ui list">
+                <li>以commonJS 的形式来书写，支持AMD/CMD,方便项目迁移。</li>
+                <li>各资源被模块化。</li>
+                <li>替代部分 grunt/gulp 的工作，比如打包、压缩混淆、图片转base64等。</li>
+                <li>支持很多模块加载器的调用，可以使模块加载器灵活定制，比如babel-loader加载器，该加载器能使我们使用ES6的语法来编写代码。</li>
+                <li>可以通过配置打包成多个文件，有效的利用浏览器的缓存功能提升性能。</li>
+                <li>使用模块加载器，可以支持sass，less等处理器进行打包且支持静态资源样式及图片进行打包。</li>
+                <li>在内存中完成打包，性能更快。</li>
+            </ol>
+            Webpack将项目中用到的一切静态资源都视之为模块，模块之间可以互相依赖。Webpack对它们进行统一的管理以及打包发布。
+        </div>
+        <br/>
+
+
+        <div class="ui segment" id='guifan'>
+            <div class="ui large header"><!-- <i class="tag icon"></i> --> js规范</div>
+            <div class="ui divider"></div>
+            对AMD/CMD 模式来说，模块是异步加载的，所以我们常规需要使用 define 函数来定义回调。<br/>
+            AMD，用过RequireJS的并不陌生，AMD是在CommonJS的基础上考虑了浏览器的异步加载特性而产生的，可以让模块异步加载并保证执行顺序。
+            <pre class="brush: js;">
+                define(['a'], function(a){
+                    return {
+                        foo: a.foo
+                    };
+                });
+            </pre>
+            CMD，用过SeaJS的小伙伴是不是很熟悉。
+            <pre class="brush: js;">
+                define(function (require, exports, module){
+                    var a = require('a');
+                    exports.foo = a.foo;
+                    exports.b = function (){
+
+                    };
+                });
+            </pre>
+
+            webpack 遵循 commonJS 语法，无须任何 define ，这种方式语法更加简洁直观。
+            <pre class="brush: js;">
+                var a = require('a');
+                exports.foo = a.foo;          
+                exports.b = function (){
+
+                };
+            </pre>
+            CommonJS的 require 函数虽是同步加载，但浏览器并不同步加载该模块，对 require 的处理是由Webpack进行解析和打包的（类似browserify），浏览器只需要执行打包后的代码。但是对于React中的JSX语法，这就需要使用Webpack的扩展加载器来处理了，如jsx-loader。
+        </div><br/>
+
+
+        <div class="ui segment" id='anzhuang'>
+            <div class="ui large header">安装</div>
+            <div class="ui divider"></div>
+
+            <p class="ui small header">1.全局安装</p>
+            <p>执行命令：npm install webpack -g </p>
+            <p class="ui small header">2.项目依赖安装</p>
+            <p>执行命令：npm install webpack --save-dev</p>
+            <p>node_modules文件夹中会包含webpack，此时可以使用webpack命令了</p>
+            <p class="ui small header">3.生成package.json文件</p>
+            <p>根目录下执行命令：npm init</p>
+            <p class="ui small header">4.安装插件</p>
+            <p>若package.json文件已配置好，根目录下执行命令：npm install</p>
+        </div><br/>
+
+        <div class="ui segment" id='peizhi'>
+            <div class="ui large header">配置文件</div>
+            <div class="ui divider"></div>
+
+            <p>配置文件webpack.config.js，好比Gulpfile.js 或 Gruntfile.js，用来配置项目，告诉webpack需要做哪些操作。</p>
+            <p>一个简单的webpack.config.js代码如下：</p>
+            <pre class="brush: js;">
+                module.exports = { 
+                    entry: {
+                        main : './assets/js/src/main.js',
+                    }, 
+                    output: {
+                        path: path.join(__dirname, './assets/build/'),
+                        publicPath: '/assets/build/',
+                        filename: 'js/[name].bundle.js' 
+                    },
+                    module: {
+                      loaders: [
+                        { test: /\.css$/, loader: 'style-loader!css-loader' },
+                        //{ test: /\.css$/,loader: ExtractTextPlugin.extract("style-loader", "css-loader")},
+                        { test: /\.js[x]?$/, loaders: ['react-hot', 'jsx?harmony'], exclude: /node_modules/ },
+                        { test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
+                        { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192&name=images/[name].[hash].[ext]'},
+                        { test: /\.coffee$/, loader: 'coffee'},
+                        { test: /\.html$/,   loader: 'html'},
+                        { test: /\.json$/,   loader: 'json'},
+                        { test: /\.(woff|woff2)$/,   loader: "url?limit=10000&minetype=application/font-woff&name=fonts/[name].[ext]"},
+                        { test: /\.ttf$/,    loader: "file?name=fonts/[name].[ext]"},
+                        { test: /\.eot$/,    loader: "file?name=fonts/[name].[ext]"},
+                        { test: /\.svg$/,    loader: "file?name=fonts/[name].[ext]"}
+                      ]
+                    },
+                    resolve: {
+                        root: path.resolve('./assets'),
+                        extensions: ['', '.js', '.jsx', '.json', '.scss'],
+                        alias: {
+                            jquery : 'js/lib/jquery-2.2.0.min.js',
+                            semantic : '3rdparty/dist/semantic.min.js',
+                            signals : '3rdparty/signals.min.js',
+                            lodash : 'js/lib/lodash.min.js',
+                            component : 'js/jsx/component.js',
+                            lib : 'js/lib/lib.js',
+                            module:'js/src/module.js',
+                        }
+                    },
+                    plugins: []
+                };
+            </pre>
+            <span class="ui header">entry:</span> 入口文件，比如我这边的入口文件时main.js<br/>
+            <span class="ui header">output:</span> 目标文件，我这边是在根目录下生成assets/build/js文件夹，该文件夹内有[name].bundle.js文件；
+            output.path: 打包文件存放的绝对路径；output.publicPath: 网站运行时的访问路径；output.filename: 打包后的文件名。<br/>
+            <span class="ui header">resolve:</span> 解析模块路径，root：绝对路径；extensions：可以用来指定模块的后缀，这样在引入模块时就不需要写后缀，会自动补全；alias：别名，直接require别名。<br/>
+            <span class="ui header">plugins:</span> 定义了需要使用的插件，比如commonsPlugin在打包多个入口文件时会提取公用的部分。<br/>
+            <span class="ui header">module.loaders：</span>文件加载器，对相应文件需要使用什么加载器来处理，比如jsx-loader加载器处理jsx文件，还有style-loader和css-loader加载器，处理样式文件。
+            <p></p>
+            <p>加载器安装 <span class="ui header">npm install jsx-loader style-loader css-loader sass-loader url-loader file-loader --save-dev</span></p>
+            更多详情参见：<a href='http://webpack.github.io/docs/configuration.html' target="_blank">configuration</a>
+        </div><br/>
+
+        <div class="ui segment" id='mingling'>
+            <div class="ui large header">webpack命令</div>
+            <div class="ui divider"></div>
+
+            <pre class="brush: js;">
+                webpack     //启动webpack命令
+                webpack -p  //对打包后的文件进行压缩
+                webpack -d  //提供SourceMaps，方便调试
+                webpack -w  //提供watch监听，实时打包更新
+                webpack --config    //指定配置文件
+                webpack --colors    //输出结果带彩色，比如：会用红色显示耗时较长的步骤
+                webpack --profile   //输出性能数据，可以看到每一步的耗时
+                webpack --display-modules   //默认情况下 node_modules 下的模块会被隐藏，加上这个参数可以显示这些被隐藏的模块
+                webpack --display-error-details     //可以查看详细信息。
+            </pre>
+            如命令：webpack --display-modules --profile --colors
+        </div><br/>
+        
+        <div class="ui segment">
+            main.html 代码如下：
+            <pre class="brush: html;">
+                &lt;!DOCTYPE html&gt;
+                &lt;html lang="en"&gt;
+                &lt;/head&gt;
+                    <meta charset="utf-8" />
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+                    <meta http-equiv="Pragma" content="no-cache">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>main</title>
+                    <link rel="stylesheet" href="/assets/build/css/main.css" />
+                &lt;/head&gt;
+                &lt;body&gt;
+                    <div id="rp_main"></div>
+                    <script src="assets/build/js/vendor.js"></script>
+                    <script src="assets/build/js/main.bundle.js"></script>
+                &lt;/body&gt;
+                &lt;/html&gt;
+            </pre>
+
+            main.js 代码如下：
+            <pre  class="brush: js">
+            require("../../3rdparty/dist/semantic.min.css");
+            require("../../style/lib.css");
+            var React = require('react');
+            var ReactDOM = require('react-dom');
+            var m=require('module');
+            ReactDOM.render(<m.App name="汽车超人"/>, document.getElementById('rp_main'));
+            </pre>
+            到此，webpack都配置好了，执行行命令：webpack，ok<br/>
+        </div><br/>
+
+
+        <div class="ui segment" id='loader'>
+            <div class="ui large header">模块加载器</div>
+            <div class="ui divider"></div>
+
+            Webpack 将所有静态资源都认为是模块，比如:js，jsx，css，scss，图片等，从而可以对其进行统一管理，通过对应的加载器处理成模块。<br/>
+            Webpack 的加载器之间可以进行串联，一个加载器的输出可以成为另一个加载器的输入。比如 less 文件先通过 less-loader 处理成 css，然后再通过 css-loader 加载成css模块，最后由 style-loader 加载器对其做最后的处理，通过 &lt;style&gt; 标签将其应用到最终的浏览器环境。<br/>
+
+            为了让Webpack识别什么样的资源应该用什么加载器去载入，需要在配置文件进行配置，通过正则表达式对文件名进行匹配。例如：
+            <pre  class="brush: js;">
+                module: {
+                  loaders: [
+                    { test: /\.css$/, loader: 'style-loader!css-loader' },
+                    { test: /\.js[x]?$/, loaders: ['react-hot', 'jsx?harmony'], exclude: /node_modules/ },
+                    { test: /\.scss$/, loader: 'style!css!sass?sourceMap'},
+                    { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192&name=images/[name].[hash].[ext]'},
+                    { test: /\.coffee$/, loader: 'coffee'},
+                    { test: /\.html$/,   loader: 'html'},
+                    { test: /\.json$/,   loader: 'json'},
+                    { test: /\.(woff|woff2)$/,   loader: "url?limit=8192&minetype=application/font-woff&name=fonts/[name].[ext]"},
+                    { test: /\.ttf$/,    loader: "file?name=fonts/[name].[ext]"},
+                    { test: /\.eot$/,    loader: "file?name=fonts/[name].[ext]"},
+                    { test: /\.svg$/,    loader: "file?name=fonts/[name].[ext]"}
+                  ]
+                }
+            </pre>
+            加载器之间的级联是通过 ! 来连接，例如：style-loader!css-loader!less-loader。"-loader" 可以省略，如：style!css!less。<br/>
+            jsx 文件由 jsx-loader 处理，加载器支持参数，?harmony 参数使其支持ES6语法。当然也可以用 babel-loader<br/>
+            图片资源，由 url-loader 实现，代码中 url-loader?limit=8192 小于 8k 的图片转为 Base64。<br/>
+            更多详情参见：<a href='http://webpack.github.io/docs/loaders.html' target="_blank">loaders</a>，<a href='http://webpack.github.io/docs/list-of-loaders.html' target="_blank">list-of-loaders</a>
+        </div><br/>
+
+
+        <div class="ui segment" id='alias'>
+            <div class="ui large header">使用别名</div>
+            <div class="ui divider"></div>
+
+            别名 resolve.alias，把一个请求重定向到另一个路径，如下：
+
+            <pre class="brush: js;">
+                resolve: {
+                    root: path.resolve('./assets'),
+                    extensions: ['', '.js', '.jsx', '.json', '.scss'],
+                    alias: {
+                        jquery : 'js/lib/jquery-2.2.0.min.js',
+                        semantic : '3rdparty/dist/semantic.min.js',
+                        signals : '3rdparty/signals.min.js',
+                        lodash : 'js/lib/lodash.min.js',
+                        component : 'js/jsx/component.js',
+                        lib : 'js/lib/lib.js',
+                        module:'js/src/module.js',
+                    }
+                }
+            </pre>
+            require('jquery')，其实就等价于 require('./assets/js/lib/jquery-2.2.0.min.js')。
+        </div><br/>
+
+
+        <div class="ui segment" id='gonggongmokuai'>
+            <div class="ui large header">公共模块提取</div>
+            <div class="ui divider"></div>
+
+            使用 CommonsChunkPlugin 插件来提取多个页面之间的公共模块，并将该模块打包为 common.js 。配置如下：
+
+            <pre class="brush: js;">
+                entry: {
+                    main : './assets/js/src/main.js',
+                    form : './assets/js/jsx/form.js',
+                    vendor: ['jquery','react','react-dom','signals','semantic','component','lib']
+                },
+                plugins: [
+                    new CommonsChunkPlugin({
+                        name: 'vendor',
+                        filename: 'js/vendor.js',
+                        chunks: ["main","form"],
+                        minChunks: 2
+                    })
+                ]
+            </pre>
+            entry:入口文件增加entry.main,entry.form,entry.vendor<br/>
+            plugins:插件项增加new CommonsChunkPlugin<br/>
+            最终将生成公共模块文件js/vendor.js<br/>
+            更多详情参见：<a href='http://webpack.github.io/docs/code-splitting.html' target="_blank">code-splitting</a>
+        </div><br/>
+
+
+        <div class="ui segment" id='dabaoyangshi'>
+            <div class="ui large header">独立打包样式</div>
+            <div class="ui divider"></div>
+
+            样式会被默认打包到js文件中，怎么独立出来作为单独样式文件，然后在页面中用&lt;link&gt;标签引入。作用插件 extract-text-webpack-plugin
+            <pre class="brush: js;">
+                entry: {
+                    main : './assets/js/src/main.js',
+                    form : './assets/js/jsx/form.js',
+                    vendor: ['jquery','react','react-dom','signals','semantic','component','lib']
+                },
+                module: {
+                  loaders: [
+                    { test: /\.css$/,loader: ExtractTextPlugin.extract("style-loader", "css-loader")}
+                  ]
+                },
+                plugins: [
+                    new ExtractTextPlugin("css/[name].css")
+                ]
+            </pre>
+            module.loaders 增加 { test: /\.css$/,loader: ExtractTextPlugin.extract("style-loader", "css-loader")}<br/>
+            plugins:插件项增加new ExtractTextPlugin("css/[name].css")<br/>
+            最终将生成公共模块文件css/main.css 和 css/form.css<br/>
+            更多详情参见：<a href='http://webpack.github.io/docs/stylesheets.html' target="_blank">stylesheets</a>
+        </div><br/>
+
+        <div class="ui segment" id='dabaoduowenjian'>
+            <div class="ui large header">打包成多个资源文件</div>
+            <div class="ui divider"></div>
+
+            为减少加载时间，可能要将项目打包成多个资源文件，怎么办呢？创建多个入口文件：如下：
+            <pre class="brush: js;">
+                entry: {
+                    main : './assets/js/src/main.js',
+                    form : './assets/js/jsx/form.js',
+                    vendor: ['jquery','react','react-dom','signals','semantic','component','lib']
+                }, 
+                output: {
+                    path: path.join(__dirname, './assets/build/'),
+                    publicPath: '/assets/build/',
+                    filename: 'js/[name].bundle.js' 
+                },
+                plugins: [
+                    new CommonsChunkPlugin({
+                        name: 'vendor',
+                        filename: 'js/vendor.js',
+                        chunks: ["main","form"],
+                        minChunks: 2
+                    })
+                ]
+            </pre>
+            打包后，会生成三个文件，分别为：main.bundle.js,form.bundle.js,vendor.js<br/>
+            更多详情参见：<a href='http://webpack.github.io/docs/code-splitting.html' target="_blank">code-splitting</a>
+        </div><br/>
+
+
+        <div class="ui segment" id='dabaotupian'>
+            <div class="ui large header">打包图片</div>
+            <div class="ui divider"></div>
+
+            图片资源由 url-loader 来加载的，既可以是 css 文件里 url 属性，也可以是 require 请求，如下：
+            <pre  class="brush: css;">
+                .bgimg{
+                    background: url(../images/18050.png);
+                }
+            </pre>
+            <pre  class="brush: js;">
+                var img = document.createElement("img"); 
+                img.src = require("../../images/a.jpg"); 
+                document.body.appendChild(img);
+            </pre>
+            webpack.config.js 配置如下：
+            <pre  class="brush: js;">
+                output: {
+                    path: path.join(__dirname, './assets/build/'),
+                    publicPath: '/assets/build/',
+                    filename: 'js/[name].bundle.js' 
+                },
+                module: {
+                  loaders: [
+                    { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192&name=images/[name].[hash].[ext]'},
+                  ]
+                }
+            </pre>
+            小于 8k 的图片会转化为 base64，否则，在 ./assets/build/images 目录下生成相应的图片。此时要注意 output.publicPath 的配置，若为空，则为根目录，有可能导致打包后的图片路径找不到。
+        </div><br/>
+
+
+        <div class="ui segment" id='anxujiazai'>
+            <div class="ui large header">按需加载</div>
+            <div class="ui divider"></div>
+
+            使用 require.ensure，当需要时再加载，如下：
+            <pre class="brush: js;">
+                require.ensure(["module-a", "module-b"], function(require) {
+                    var a = require("module-a");
+                    // ...
+                });
+            </pre>
+            更多详情参见：<a href='http://webpack.github.io/docs/code-splitting.html' target="_blank">code-splitting</a>
+        </div><br/>
+
+        <div class="ui segment" id='cdn'>
+            <div class="ui large header">使用 CDN</div>
+            <div class="ui divider"></div>
+
+            有些文件我们并不希望被打包，而是以CDN方式并以 &lt;script&gt; 的形式引用，但在 webpack 中又可以正常使用。怎么办呢？请用 externals 声明外部依赖。
+
+            <pre class="brush: js;">
+                externals: {
+                    react : "React",
+                    jquery: "jQuery",
+                    lodash: "_",
+                    module:true
+                }
+            </pre>
+            更多详情参见：<a href='http://webpack.github.io/docs/library-and-externals.html' target="_blank">library-and-externals</a>
+        </div><br/>
+
+
+        <div class="ui segment" id='gulp'>
+            <div class="ui large header">Webpack & gulp</div>
+            <div class="ui divider"></div>
+
+            webpack 可以与 gulp 配合，一起使用，配置如下：
+            <pre class="brush: js;">
+                var webpack = require("webpack");
+                var webpackConfig = require('./webpack.config.js');
+                gulp.task("webpack", function(callback) {
+                    webpack(webpackConfig, function(err, stats) {
+                      if(err) throw new gutil.PluginError("webpack:build", err);
+                      gutil.log("[webpack:build]", stats.toString({
+                        colors: true
+                      }));
+                      callback();
+                    });
+                });
+            </pre>
+            执行命令：gulp webpack，ok<br/>
+            更多详情参见：<a href='http://webpack.github.io/docs/usage-with-gulp.html' target="_blank">usage-with-gulp</a>
+        </div><br/>
+
+        <div class="ui segment" id='react'>
+            <div class="ui large header">Webpack & React</div>
+            <div class="ui divider"></div>
+
+            一个简单的React组件，module.js 代码如下：
+            <pre class="brush: js;">
+                class Hello extends React.Component {
+                  render() {
+                    return (
+                      <h3>Hello {this.props.name}!</h3>
+                    );
+                  }
+                }
+
+                var App = React.createClass({
+                    getInitialState: function() {
+                      return {name: 'test'};
+                    },
+                    render: function() { 
+                        return (
+                          <h3>{this.props.name}</h3>
+                      );
+                    }
+                });
+                module.exports = {
+                  Hello:Hello,
+                  App:App
+                }                
+            </pre>
+
+            在 main.js 中引入 module.js
+            <pre  class="brush: js; highlight: [5];">
+            require("../../3rdparty/dist/semantic.min.css");
+            require("../../style/lib.css");
+            var React = require('react');
+            var ReactDOM = require('react-dom');
+            var m=require('module');
+            ReactDOM.render(<m.App name="汽车超人"/>, document.getElementById('rp_main'));
+            </pre>
+            这时，main.js 和 module.js 都是JSX语法，需要对它们进行预处理，这就要引入JSX加载器。配置文件中加入如下配置：
+
+            <pre  class="brush: js;">
+                module: {
+                  loaders: [
+                    { test: /\.js[x]?$/, loaders: ['jsx?harmony'], exclude: /node_modules/ },
+                  ]
+                }            
+            </pre>
+        </div><br/>
+
+        <div class="ui segment" id='devserver'>
+            <div class="ui large header">webpack-dev-server</div>
+            <div class="ui divider"></div>
+
+            Webpack提供了一个轻量的node.js express服务器，开发过程中，监听文件变化，实时打包，通过 socket.io 通知客户端，实现页面的自动刷新。<br/>
+            首先，执行安装命令：<span class="ui header">npm install webpack-dev-server --save-dev</span><br/>
+
+            启动开发服务器，运行命令：<span class="ui header">webpack-dev-server</span>，请看控制台日志，然后访问 <span class="ui header">localhost:8080/webpack-dev-server</span>。改变相应 js 中的内容，保存，看页面，有效果了。再看看控制台输出日志，自动编译哦，然后把编译结果通知客户端更新。<br/>
+            更多详情参见：<a href='http://webpack.github.io/docs/webpack-dev-server.html' target="_blank">webpack-dev-server</a>
+        </div><br/>
+
+        <div class="ui segment" id='reacthot'>
+            <div class="ui large header">react-hot-loader</div>
+            <div class="ui divider"></div>
+
+            Webpack有运行时模块替换功能，称之为Hot Module Replacement (HMR)。当某个模块代码发生变化时，Webpack实时打包将其推送到页面并进行替换，从而无需刷新页面就实现代码替换。<br/>
+
+            在React开发中，针对 React 出现了一个第三方 react-hot-loader 加载器，可以轻松实现 React 组件的热替换。因为 React 的每一次更新都是全局刷新虚拟DOM，让React组件的热替换可以成为通用的加载器，从而极大提高开发效率。<br/>
+            首先，执行安装命令：<span class="ui header">npm install react-hot-loader —save-dev</span><br/>
+
+            webpack-dev-server 需要开启HMR参数hot，下面创建一个 server.js 文件启动Webpack开发服务器，代码如下：<br/>
+            server.js
+            <pre  class="brush: js;">
+                var webpack = require('webpack');
+                var WebpackDevServer = require('webpack-dev-server');
+                var config = require('../webpack.config2');
+
+                new WebpackDevServer(webpack(config), {
+                  publicPath: config.output.publicPath,
+                  hot: true,
+                  historyApiFallback: true
+                }).listen(3000, 'localhost', function (err, result) {
+                  if (err) {
+                    console.log(err);
+                  }
+
+                  console.log('Listening at localhost:3000');
+                });
+            </pre>
+            除了 server.js 外，webpack.config.js 还需要如下修改：<br/>
+
+            <pre  class="brush: js; auto-links: false;">
+                entry: {
+                    main : './assets/js/src/main.js',
+                    form : './assets/js/jsx/form.js',
+                    index: [
+                        'webpack-dev-server/client?http://localhost:3000', // WebpackDevServer host and port
+                        'webpack/hot/only-dev-server',
+                        './assets/js/src/index.js' // Your appʼs entry point
+                    ],
+                    vendor: ['jquery','react','react-dom','signals','semantic','component','lib']
+                },
+                module: {
+                  loaders: [
+                    { test: /\.js[x]?$/, loaders: ['react-hot', 'jsx?harmony'], exclude: /node_modules/ }
+                  ]
+                },
+                plugins: [
+                    new webpack.HotModuleReplacementPlugin(),
+                    new webpack.NoErrorsPlugin()
+                ]
+            </pre>
+
+            entry.index：配置webpack开发服务器，接收Webpack的推送，通知相关React组件进行重新Render。<br/>
+            module.loaders：Webpack用 react-hot-loader 加载React组件。<br/>
+            plugins：加上热替换的插件和防止报错的插件。<br/>
+            执行命令：node server.js ，ok，资源的任何修改，无需刷新页面，即可重新宣染。<br/>
+
+            更多详情参见：<a href='http://gaearon.github.io/react-hot-loader/getstarted/' target="_blank">react-hot-loader</a>
+        </div><br/><br/>
+
+    </div>
+
+    <script type="text/javascript" src="./js/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="./3rd/SyntaxHighlighter/scripts/shCore.js"></script>
+    <script type="text/javascript" src="./3rd/SyntaxHighlighter/scripts/shAutoloader.js"></script>
+    <script type="text/javascript" src="./js/semantic.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            SyntaxHighlighter.autoloader(
+                ['js','jscript','javascript','3rd/SyntaxHighlighter/scripts/shBrushJScript.js'],
+                ['bash','shell','3rd/SyntaxHighlighter/scripts/shBrushBash.js'],
+                ['css','3rd/SyntaxHighlighter/scripts/shBrushCss.js'],
+                ['xml','html','3rd/SyntaxHighlighter/scripts/shBrushXml.js'],
+                ['sql','3rd/SyntaxHighlighter/scripts/shBrushSql.js'],
+                ['php','3rd/SyntaxHighlighter/scripts/shBrushPhp.js'],
+                ['java','3rd/SyntaxHighlighter/scripts/shBrushJava.js'],
+                ['groovy','3rd/SyntaxHighlighter/scripts/shBrushGroovy.js']
+            );
+            SyntaxHighlighter.config.bloggerMode = true;
+            SyntaxHighlighter.defaults['toolbar'] = false;
+            SyntaxHighlighter.all(); 
+        })
+    </script>
+</body>
+</html>
+
+
